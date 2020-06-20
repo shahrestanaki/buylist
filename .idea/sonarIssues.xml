@@ -28,6 +28,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/exception/AppException.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/exception/HandlerException.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/com/model/BaseEntity.java">
           <value>
             <set />
@@ -63,6 +73,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/view/WebErrorDto.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/com/webservice/Application.java">
           <value>
             <set />
@@ -78,12 +93,47 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/messages.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../springboot-oauth2/pom.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../springboot-oauth2/src/main/java/com/OAuth2ServerJwtApplication.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../springboot-oauth2/src/main/java/com/config/config/PropertiesWithJavaConfig.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../springboot-oauth2/src/main/java/com/config/security/ResourceServerConfiguration.java">
           <value>
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../springboot-oauth2/src/main/java/com/exception/AppException.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../springboot-oauth2/src/main/java/com/exception/HandlerException.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../springboot-oauth2/src/main/java/com/model/UserInfo.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../springboot-oauth2/src/main/java/com/tools/GetResourceBundle.java">
           <value>
             <set />
           </value>
@@ -104,6 +154,46 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/../springboot-oauth2/src/main/resources/application.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="E:/WorkSpace-club/clubapp-flat/pom.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="E:/WorkSpace-club/clubapp-flat/src/main/java/com/ansarit/clubapp/repository/InvitesMainRepository.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="E:/WorkSpace-club/clubapp-flat/src/main/java/com/ansarit/clubapp/repository/SettingMainRepository.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="E:/WorkSpace-club/clubapp-flat/src/main/java/com/ansarit/clubapp/service/api/ISettingService.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="E:/WorkSpace-club/clubapp-flat/src/main/java/com/ansarit/clubapp/service/impl/InvitesService.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="E:/WorkSpace-club/clubapp-flat/src/main/java/com/ansarit/clubapp/service/impl/SettingService.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="E:/WorkSpace-club/clubapp-flat/src/main/java/com/ansarit/clubapp/service/impl/SmsService.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="E:/WorkSpace-club/clubapp-flat/src/main/java/com/ansarit/clubapp/web/rest/InvitesController.java">
           <value>
             <set />
           </value>

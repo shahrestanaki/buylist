@@ -1,21 +1,39 @@
 package com.webservice;
 
 import com.exception.AppException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.google.gson.Gson;
+import com.view.WebErrorDto;
+import org.springframework.http.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 public class WebConnect {
-    static String CORE_URL = "http://localhost:8080/core/";
+
+    private static HttpHeaders getHttpHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        return headers;
+    }
+
+    private static HttpHeaders getHttpHeadersAuthorization(String bearerToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        headers.set("Authorization", "bearer " + bearerToken);
+        return headers;
+    }
+
     static RestTemplate restTemplate = new RestTemplate();
 
-    public static ResponseEntity<String> getEntity(String addUrl) {
-        ResponseEntity<String> response = restTemplate.getForEntity(CORE_URL + addUrl, String.class);
-        checkResponse(response);
-        return response;
-    }
+    /*public static ResponseEntity<String> getEntity(String url) {
+        try {
+            ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+            checkResponse(response);
+            return response;
+        } catch (Exception e) {
+            handelWebError(e);
+        }
+        return null;
+    }*/
 
    /* public static <R> R getObject(String addUrl, HttpEntity httpHeader, Class<R> responseType) {
         ResponseEntity<R> responseEntity = null;
@@ -33,25 +51,33 @@ public class WebConnect {
         try {
             responseEntity = restTemplate.exchange(url, type, httpHeader, responseType);
         } catch (Exception e) {
-            e.printStackTrace();
+            handelWebError(e);
         }
         if (responseEntity != null && responseEntity.getStatusCode().equals(HttpStatus.OK)) {
             return responseEntity.getBody();
-        } else {//TODO error
+        } else {
             return null;
         }
-
     }
-
-   /* public static <T> T getObject(String addUrl) {
-        T response = restTemplate.getForObject(CORE_URL + addUrl, null);
-        //checkResponse(response);
-        return response;
-    }*/
 
     private static void checkResponse(ResponseEntity response) {
         if (!response.getStatusCode().equals(HttpStatus.OK)) {
             throw new AppException("error in get response");
+        }
+    }
+
+
+    private static void handelWebError(Exception e) {
+        e.printStackTrace();
+
+        String error = ((HttpClientErrorException.BadRequest) e).getResponseBodyAsString();
+        if (error.contains("core_code")) {
+            Gson gson = new Gson();
+            WebErrorDto obj = gson.fromJson(error, WebErrorDto.class);
+            System.out.println(error);
+            throw new AppException("core." + obj.getMessage().replaceAll("\\ ", "\\."));
+        } else {
+            throw new AppException("core.general.error");
         }
     }
 }

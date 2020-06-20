@@ -14,6 +14,7 @@ public class AppException extends RuntimeException {
 
     public AppException(String message) {
         this.message = translate(message);
+        this.httpStatus = HttpStatus.BAD_REQUEST;
     }
 
     public AppException(String message, HttpStatus httpStatus) {

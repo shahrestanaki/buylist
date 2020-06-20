@@ -1,20 +1,13 @@
 package com;
 
-import com.view.SingUpDto;
-import com.view.UserInfoView;
-import com.webservice.WebConnect;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 
 @SpringBootApplication
 public class Application {
     public static void main(String... args) {
         SpringApplication.run(Application.class, args);
-        ResponseEntity<String> test = WebConnect.getEntity("test/get");
+       /* ResponseEntity<String> test = WebConnect.getEntity("test/get");
         System.out.println("**********  " + test.getBody());
 
 
@@ -26,7 +19,7 @@ public class Application {
 
 
         SingUpDto singUpDto = new SingUpDto();
-        singUpDto.setUserName("usertest");
+        singUpDto.setUserName("usertest2");
         HttpEntity<SingUpDto> request = new HttpEntity<>(singUpDto);
         user = WebConnect.getObject(CORE_URL + "test/postuser", HttpMethod.POST, request, UserInfoView.class);
         System.out.println("**********  " + user.getUserName());
@@ -37,20 +30,6 @@ public class Application {
         request = new HttpEntity<>(singUpDto, getHttpHeadersAuthorization(token));
         user = WebConnect.getObject(CORE_URL + "users/postuser", HttpMethod.POST, request, UserInfoView.class);
         System.out.println("**********  " + user.getUserName());
-
-    }
-
-    private static HttpHeaders getHttpHeaders(String bearerToken) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
-        // headers.set("Authorization", bearerToken);
-        return headers;
-    }
-
-    private static HttpHeaders getHttpHeadersAuthorization(String bearerToken) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
-        headers.set("Authorization", "bearer " + bearerToken);
-        return headers;
+*/
     }
 }
