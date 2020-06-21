@@ -1,14 +1,19 @@
 package com.tools;
 
 import com.service.search.SearchCriteria;
-
 import com.service.search.SearchCriteriaList;
 import org.springframework.util.StringUtils;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class GeneralTools {
+    private static final String ENCRYPT_TOKEN = "fF5e9D1F8S1W";
+
     public static String createRandom(String type, int targetStringLength) {
         int leftLimit = 0;
         int rightLimit = 0;
@@ -44,8 +49,12 @@ public class GeneralTools {
         return generatedString;
     }
 
-    public static <R extends SearchCriteriaList> SearchCriteriaList convertToCriteriaList(R  test, String... except) {
-        List<String> notInclude = new ArrayList<>() ;
+    public static double createRandom(int min, int max) {
+        return (int) (Math.random() * ((max - min) + 1)) + min;
+    }
+
+    public static <R extends SearchCriteriaList> SearchCriteriaList convertToCriteriaList(R test, String... except) {
+        List<String> notInclude = new ArrayList<>();
         notInclude.addAll(Arrays.asList(except));
         notInclude.add("serialVersionUID");
         //------------
@@ -64,7 +73,7 @@ public class GeneralTools {
                             if (name.startsWith("start") && value.contains("/") && value.length() == 10) {
                                 //filter.add(new SearchCriteria(name.substring(5, 6).toLowerCase().concat(name.substring(6)), ">", GeneralUtilityService.shamsiTomailadiByTime(value, "00:00:01")));
                             } else if (name.startsWith("end") && value.contains("/") && value.length() == 10) {
-                           //     filter.add(new SearchCriteria(name.substring(3, 4).toLowerCase().concat(name.substring(4)), "<", GeneralUtilityService.shamsiTomailadiByTime(value, "23:59:59")));
+                                //     filter.add(new SearchCriteria(name.substring(3, 4).toLowerCase().concat(name.substring(4)), "<", GeneralUtilityService.shamsiTomailadiByTime(value, "23:59:59")));
                             } else {
                                 filter.add(new SearchCriteria(name, ":", value));
                             }
@@ -79,5 +88,25 @@ public class GeneralTools {
         }
         search.setSearch(filter);
         return search;
+    }
+
+    public static String encrypt(String value, String key) throws Exception {
+        IvParameterSpec iv = new IvParameterSpec(ENCRYPT_TOKEN.getBytes(StandardCharsets.UTF_8), 0, 16);
+        SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), 0, 16, "AES");
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+        cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+        byte[] encrypted = cipher.doFinal(value.getBytes());
+        System.out.println("encrypted = " + Base64.getEncoder().encodeToString(encrypted));
+        return Base64.getEncoder().encodeToString(encrypted);
+    }
+
+    public static String decrypt(String encrypted, String key) throws Exception {
+        IvParameterSpec iv = new IvParameterSpec(ENCRYPT_TOKEN.getBytes(StandardCharsets.UTF_8), 0, 16);
+        SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), 0, 16, "AES");
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+        cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
+        byte[] original = cipher.doFinal(Base64.getDecoder().decode(encrypted));
+        System.out.println("new String(original) = " + new String(original));
+        return new String(original);
     }
 }

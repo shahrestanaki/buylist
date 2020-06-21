@@ -18,4 +18,8 @@ public class CorrectDate {
         c.add(unit, amount);
         return c.getTime();
     }
+
+    public static String convertDate(Date date, String format) {
+        return new SimpleDateFormat("yyyy" + format + "MM" + format + "dd").format(date);
+    }
 }
