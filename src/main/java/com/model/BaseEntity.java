@@ -19,4 +19,14 @@ public class BaseEntity implements Serializable {
     @Column(name = "change_Date")
     private Date changeDate;
 
+    @Column(name = "enabled", nullable = false)
+    private Boolean active;
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = new Date();
+    }
+
+    public void setActive(Boolean active) {
+        this.active = true;
+    }
 }

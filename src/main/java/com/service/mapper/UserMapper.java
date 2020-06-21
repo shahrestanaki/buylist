@@ -7,16 +7,16 @@ import org.mapstruct.factory.Mappers;
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-   /* UserView map(UserInfoView userInfo);
+   /* UserView map(UsersUpdateView userInfo);
 
-    default List<UserView> listMap(List<UserInfoView> userInfoa) {
+    default List<UserView> listMap(List<UsersUpdateView> userInfoa) {
         if (userInfoa == null) {
             return null;
         }
 
         List<UserView> list = new ArrayList<>();
 
-        for (UserInfoView userInfo : userInfoa) {
+        for (UsersUpdateView userInfo : userInfoa) {
             list.add(map(userInfo));
         }
 

@@ -1,16 +1,12 @@
 package com.view;
 
 import com.tools.Mobile;
+import com.tools.UserName;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 @Data
-public class SingUpDto {
+public class ForgetPasswordDto {
     @Mobile
     private String mobile;
-    @Length(min = 5, max = 20)
-    private String password;
-    @Length(min = 5, max = 20)
-    private String repeatPassword;
-
 }
