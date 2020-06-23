@@ -14,9 +14,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Constraint(validatedBy={})
 @Documented
-@Pattern(regexp= PersianOnly.PATTERN,message="{validate.input.NotFarsiCharacters}")
+@Pattern(regexp= PersianOnly.PATTERN,message="فقط کاراکترهای فارسی مجاز می باشد")
 public @interface PersianOnly   {
-	String message() default "{org.my.constraints.persianOnly}";
+	String message() default "فقط کاراکترهای فارسی مجاز می باشد";
 	Class<?>[] groups() default {};
 	Class<? extends Payload>[] payload() default {};
 	String PATTERN = "^([\\u0600-\\u06FF,\\u0590-\\u05FF, ]*)$";

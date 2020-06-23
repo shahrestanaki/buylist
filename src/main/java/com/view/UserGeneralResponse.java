@@ -1,7 +1,9 @@
 package com.view;
 
+import lombok.Data;
 import org.springframework.http.HttpStatus;
 
+@Data
 public class UserGeneralResponse extends Response {
     private String value;
 

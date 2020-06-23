@@ -36,6 +36,7 @@ public class HandlerException extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AppException.class)
     public final ResponseEntity<Object> handleAppException(AppException ex, WebRequest request) {
         Map<String, String> params = new HashMap<>();
+        params.put("code", ErrorEnum.ValidBusiness.toString());
         params.put("timestamp", new Date().toString());
         params.put("message", ex.getMessage());
         return new ResponseEntity(params, ex.getHttpStatus());

@@ -6,6 +6,7 @@ import com.view.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,7 +27,7 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public UserLoginResponse login(@Valid @RequestBody LoginDto loginDto) {
+    public ResponseEntity<UserLoginResponse> login(@Valid @RequestBody LoginDto loginDto) {
         return userService.login(loginDto);
     }
 
@@ -37,7 +38,7 @@ public class UserController {
 
     @PostMapping("/change-password")
     public UserGeneralResponse changePassword(@Valid @RequestBody ChangePasswordDto changePasswordDto) {
-        return userService.changePassword(changePasswordDto, "user");
+        return userService.changePassword(changePasswordDto);
     }
 
     @GetMapping("/logout")
@@ -51,12 +52,12 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public UsersUpdateView update(@Valid @RequestBody UsersUpdateView view) {
+    public UsersView update(@Valid @RequestBody UsersUpdateView view) {
         return userService.update(view);
     }
 
     @PostMapping("/change-mobile")
-    public UserGeneralResponse changeMobile(@Valid @RequestBody ChangeMobileDto mobileDto) {
+    public UsersView changeMobile(@Valid @RequestBody ChangeMobileDto mobileDto) {
         return userService.changeMobile(mobileDto);
     }
 
@@ -66,7 +67,7 @@ public class UserController {
     }
 
     @GetMapping("/confirm-singup")
-    public UserLoginResponse confirmSingup(@RequestParam(value = "code") @OnlyLetter String code) {
+    public UserGeneralResponse confirmSingup(@RequestParam(value = "code")  String code) {
         return userService.confirmSingup(code);
     }
 }

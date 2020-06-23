@@ -1,8 +1,12 @@
 package com.exception;
 
+import com.tools.GetResourceBundle;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+
+import java.io.UnsupportedEncodingException;
 
 public class AppException extends RuntimeException {
     @Autowired
@@ -24,11 +28,11 @@ public class AppException extends RuntimeException {
 
     public String translate(String source) {
         try {
-            return env.getProperty(source);
-        } catch (Exception e) {
+            String temp = GetResourceBundle.getMessage_fa.getString(source);
+            return new String(temp.getBytes("ISO-8859-1"), "UTF-8");
+        } catch (NoClassDefFoundError | Exception e) {
             return source;
         }
-
     }
 
     public String getMessage() {

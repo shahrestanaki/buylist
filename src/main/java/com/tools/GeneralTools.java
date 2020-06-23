@@ -12,44 +12,35 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class GeneralTools {
-    private static final String ENCRYPT_TOKEN = "fF5e9D1F8S1W";
+    private static final String ENCRYPT_TOKEN = "WkKuGjJxCpfndb4v";
 
-    public static String createRandom(String type, int targetStringLength) {
-        int leftLimit = 0;
-        int rightLimit = 0;
+    public static String createRandom(String type, int count) {
+        String randStr = "";
         switch (type) {
             case "number":
-                leftLimit = 49;// letter '1'
-                rightLimit = 57;// letter '9'
+                randStr = "0123456789";
                 break;
             case "lowercase":
-                leftLimit = 97;
-                rightLimit = 122;
+                randStr = "abcdefghijklmnopqrstuvwxyz";
                 break;
             case "uppercase":
-                leftLimit = 65;
-                rightLimit = 90;
+                randStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                 break;
-            case "password":
-                return createRandom("lowercase", 3) +
-                        createRandom("number", 1) +
-                        createRandom("uppercase", 3);
+            case "all":
+                randStr = "ABCDEFGHIJKL0123MNOPQRSTUVWXYZabcdefghijklm0123nopqrstuvwxyzx789";
+                break;
             default:
                 break;
         }
-
-        Random random = new Random();
-        StringBuilder buffer = new StringBuilder(targetStringLength);
-        for (int i = 0; i < targetStringLength; i++) {
-            int randomLimitedInt = leftLimit + (int)
-                    (random.nextFloat() * (rightLimit - leftLimit + 1));
-            buffer.append((char) randomLimitedInt);
+        StringBuilder builder = new StringBuilder();
+        while (count-- != 0) {
+            int character = (int) (Math.random() * randStr.length());
+            builder.append(randStr.charAt(character));
         }
-        String generatedString = buffer.toString();
-        return generatedString;
+        return builder.toString();
     }
 
-    public static double createRandom(int min, int max) {
+    public static int createRandom(int min, int max) {
         return (int) (Math.random() * ((max - min) + 1)) + min;
     }
 

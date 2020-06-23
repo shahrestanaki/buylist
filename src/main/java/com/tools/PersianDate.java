@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Pattern(regexp = PersianDate.PATTERN, message = "فرمت تاریخ فارسی معتبر نمی باشد")
 public @interface PersianDate {
-    String message() default "{ui.general.error.PersianDateFormat}";
+    String message() default "فرمت تاریخ فارسی معتبر نمی باشد";
 
     Class<?>[] groups() default {};
 

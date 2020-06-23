@@ -1,25 +1,30 @@
 package com.service.mapper;
 
+import com.model.Users;
+import com.view.UsersView;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mapper
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-   /* UserView map(UsersUpdateView userInfo);
+    UsersView map(Users user);
 
-    default List<UserView> listMap(List<UsersUpdateView> userInfoa) {
-        if (userInfoa == null) {
+    default List<UsersView> listMap(List<Users> usersList) {
+        if (usersList == null || usersList.size() == 0) {
             return null;
         }
 
-        List<UserView> list = new ArrayList<>();
+        List<UsersView> list = new ArrayList<>();
 
-        for (UsersUpdateView userInfo : userInfoa) {
-            list.add(map(userInfo));
+        for (Users user : usersList) {
+            list.add(map(user));
         }
 
         return list;
-    }*/
+    }
 }

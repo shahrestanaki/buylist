@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Pattern(regexp = UserName.PATTERN, message = "نام کاربری باید شامل حروف انگليسي/ اعداد/ کاراکترهاي _. باشد")
 public @interface UserName {
-    String message() default "{org.my.constraints.persianOnly}";
+    String message() default "نام کاربری باید شامل حروف انگليسي/ اعداد/ کاراکترهاي _. باشد";
 
     Class<?>[] groups() default {};
 

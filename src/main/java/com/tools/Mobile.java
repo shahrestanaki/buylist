@@ -16,6 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Pattern(regexp = Mobile.PATTERN, message = "فرمت شماره موبایل قابل پذیرش نمی باشد")
 public @interface Mobile {
+    String message() default "فرمت شماره موبایل قابل پذیرش نمی باشد";
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};

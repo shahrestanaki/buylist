@@ -7,4 +7,7 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends GeneralRepository<Users, Long> {
 
     Users getByMobile(String mobile);
+
+    Users getByUserName(String username);
+
 }

@@ -4,17 +4,19 @@ import com.exception.AppException;
 import com.model.SingUpTemp;
 import com.model.Users;
 import com.repository.UserRepository;
+import com.service.mapper.UserMapper;
 import com.tools.GeneralTools;
 import com.tools.TokenRead;
 import com.view.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
     private final int MAX_SINGUP_SMS = 3;
-    private final String PASSWORD_KEY = "dw9FG25GH#97";
+    private final String PASSWORD_KEY = "MKt7Y6qw7ACk5Crk";
     @Autowired
     private UserRepository userRepo;
 
@@ -49,13 +51,13 @@ public class UserService {
         }
     }
 
-    public UserLoginResponse confirmSingup(String code) {
+    public UserGeneralResponse confirmSingup(String code) {
         SingUpTemp temp = singUpTempSrv.getByCodeAndSingDateStr(code);
         if (temp == null) {
             throw new AppException("singup.novalid.code" + GeneralTools.createRandom(1, 3));
         } else {
             String password;
-            String username = GeneralTools.createRandom("password", 0) + code;
+            String username = GeneralTools.createRandom("all", 10) ;
             try {
                 password = GeneralTools.decrypt(temp.getHashPassword(), PASSWORD_KEY);
             } catch (Exception e) {
@@ -67,17 +69,17 @@ public class UserService {
             Users user = new Users(username, temp.getMobile(), null, "1");
             userRepo.save(user);
 
-            return new UserLoginResponse();
+            return new UserGeneralResponse(HttpStatus.OK);
         }
     }
 
-    public UserLoginResponse login(LoginDto loginDto) {
+    public ResponseEntity<UserLoginResponse> login(LoginDto loginDto) {
         Users user = getByMobile(loginDto.getMobile());
         if (user == null) {
             throw new AppException("login.novalid.mobile" + GeneralTools.createRandom(1, 3));
         }
         loginDto.setUsername(user.getUserName());
-        return webServerSrv.login(loginDto);
+        return webServerSrv.userLogin(loginDto);
     }
 
     public UserGeneralResponse forgetPassword(ForgetPasswordDto forgetPasswordDto) {
@@ -90,34 +92,60 @@ public class UserService {
         return new UserGeneralResponse(HttpStatus.OK, newPassword);
     }
 
-    public UserGeneralResponse changePassword(ChangePasswordDto changePasswordDto, String user) {
-        TokenRead.getUserName();
-
-        return null;
+    public UserGeneralResponse changePassword(ChangePasswordDto changePasswordDto) {
+        Users user = getByUserName();
+        if (user == null) {
+            throw new AppException("general.error.novalid.username");
+        }
+        webServerSrv.changePassword(changePasswordDto);
+        return new UserGeneralResponse(HttpStatus.OK);
     }
 
     public UserGeneralResponse logout() {
-        return null;
+        webServerSrv.logout();
+        return new UserGeneralResponse(HttpStatus.OK);
     }
 
     public UsersView info() {
-        return null;
+        return UserMapper.INSTANCE.map(getByUserName());
     }
 
-    public UsersUpdateView update(UsersUpdateView view) {
-        return null;
+    public UsersView update(UsersUpdateView view) {
+        Users user = getByUserName();
+        user.setNickName(view.getNickName());
+        user.setAvatar(view.getAvatar());
+        return updateView(user);
     }
 
-    public UserGeneralResponse changeMobile(ChangeMobileDto mobileDto) {
-        return null;
+    public UsersView changeMobile(ChangeMobileDto mobileDto) {
+        Users user = getByUserName();
+        user.setMobile(mobileDto.getMobile());
+        return updateView(user);
     }
 
+    //TODO
     public UserGeneralResponse deleteMe() {
-        return null;
+        return new UserGeneralResponse(HttpStatus.BAD_REQUEST);
     }
 
 
     private Users getByMobile(String mobile) {
         return userRepo.getByMobile(mobile);
+    }
+
+    private Users getByUserName() {
+        return userRepo.getByUserName(TokenRead.getUserName());
+    }
+
+    private Users getByUserName(String username) {
+        return userRepo.getByUserName(username);
+    }
+
+    private Users update(Users users) {
+        return userRepo.save(users);
+    }
+
+    private UsersView updateView(Users user) {
+        return UserMapper.INSTANCE.map(userRepo.save(user));
     }
 }

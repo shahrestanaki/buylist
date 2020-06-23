@@ -14,10 +14,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Constraint(validatedBy={})
 @Documented
-@Pattern(regexp= OnlyLetter.PATTERN,message="{validate.input.badCharacters}")
+@Pattern(regexp= OnlyLetter.PATTERN,message="کاراکتر غیر مجاز وارد شده است")
 
 public @interface OnlyLetter   {
-	String message() default "{org.my.constraints.OnlyLetter}";
+	String message() default "کاراکتر غیر مجاز وارد شده است";
 	Class<?>[] groups() default {};
 	Class<? extends Payload>[] payload() default {};
 
