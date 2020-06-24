@@ -116,7 +116,7 @@ public class WebConnect {
             System.out.println(message);
             error = "core." + obj.getMessage().replaceAll("\\ ", "\\.");
         } else if (message.equals("") || error.equals("")) {
-            error = "core.general.message";
+            error = "core.general.error";
         }
         System.out.println("*** - message : " + message);
         throw new AppException(error);

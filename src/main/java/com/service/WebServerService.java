@@ -1,6 +1,7 @@
 package com.service;
 
 import com.exception.AppException;
+import com.tools.TokenRead;
 import com.view.*;
 import com.webservice.CoreTokenManage;
 import com.webservice.WebConnect;
@@ -54,10 +55,19 @@ public class WebServerService {
     }
 
     public String forgetPassword(String userName) {
-        return null;
+        String buylistToken = CoreTokenManage.getInstance().getToken();
+        HttpEntity<ForgetPasswordDto> request = new HttpEntity<>(new ForgetPasswordDto(userName), getHttpHeadersAuthorization(buylistToken));
+        String result = WebConnect.getObject(CORE_URL + "users/forget-Password", HttpMethod.POST, request, String.class);
+        if (result == null) {
+            throw new AppException("core.general.error");
+        }
+        return result;
     }
 
     public void changePassword(ChangePasswordDto changePasswordDto) {
+        String userToken = TokenRead.getToken();
+        HttpEntity<ChangePasswordDto> request = new HttpEntity<>(new ChangePasswordDto(), getHttpHeadersAuthorization(userToken));
+        WebConnect.getObject(CORE_URL + "users/change-Password", HttpMethod.POST, request, String.class);
     }
 
     public void logout() {
@@ -71,11 +81,22 @@ public class WebServerService {
         public singUpCore() {
         }
 
-        ;
 
         public singUpCore(String userName, String password) {
             this.userName = userName;
             this.password = password;
+        }
+    }
+
+    @Data
+    private class ForgetPasswordDto {
+        private String userName;
+
+        public ForgetPasswordDto() {
+        }
+
+        public ForgetPasswordDto(String userName) {
+            this.userName = userName;
         }
     }
 }

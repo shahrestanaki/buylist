@@ -34,6 +34,18 @@ public class TokenRead {
         }
     }
 
+    public static String getToken() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext()
+                    .getAuthentication();
+
+            return authentication.getPrincipal().toString();
+        } catch (Exception exp) {
+            throw new AppException("token.error.Token");
+        }
+    }
+
+
     /**management*/
   /*  public static String getClientId() {
         try {
