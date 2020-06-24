@@ -1,15 +1,26 @@
 package com.config;
 
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 
-@EnableWebSecurity
-//@EnableResourceServer
-@EnableGlobalMethodSecurity(prePostEnabled = true) /*enable @PreAuthorize for roles*/
-public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+@Configuration
+@EnableResourceServer
+public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+
+  /*  private final TokenStore tokenStore;
+
+    public ResourceServerConfiguration(final TokenStore tokenStore) {
+        this.tokenStore = tokenStore;
+    }
+*/
+    /*@Override
+    public void configure(final ResourceServerSecurityConfigurer resources) {
+        resources.tokenStore(tokenStore);
+    }*/
+
+    //----------------------------------
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         // http.authorizeRequests().antMatchers("/v2/api-docs", "/configuration/**", "/swagger-resources/**",  "/swagger-ui.html", "/webjars/**", "/api-docs/**").authenticated();

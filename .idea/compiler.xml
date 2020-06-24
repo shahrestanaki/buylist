@@ -9,6 +9,9 @@
         <module name="buylist" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="buylist" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

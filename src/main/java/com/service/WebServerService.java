@@ -66,7 +66,7 @@ public class WebServerService {
 
     public void changePassword(ChangePasswordDto changePasswordDto) {
         String userToken = TokenRead.getToken();
-        HttpEntity<ChangePasswordDto> request = new HttpEntity<>(new ChangePasswordDto(), getHttpHeadersAuthorization(userToken));
+        HttpEntity<ChangePasswordDto> request = new HttpEntity<>(changePasswordDto, getHttpHeadersAuthorization(userToken));
         WebConnect.getObject(CORE_URL + "users/change-Password", HttpMethod.POST, request, String.class);
     }
 
