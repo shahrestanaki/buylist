@@ -1,0 +1,28 @@
+    private static Map<String, Object> commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) {
+        final Map<String, Object> mapBodyException = new HashMap<>();
+        mapBodyException.remove("error");
+        httpServletResponse.setContentType("application/json");
+        httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        return mapBodyException;
+    }
+
+
+    @Override
+    public void configure(ResourceServerSecurityConfigurer resources) {
+        resources.authenticationEntryPoint(new AuthExceptionEntryPoint());
+        resources.accessDeniedHandler(new AccessDeniedHandler() {
+            @Override
+            public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
+
+            }
+        });
+    }
+
+
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(InvalidTokenException.class)
+    public @ResponseBody
+    ErrorResponseException invalidToken(final InvalidTokenException exception) {
+
+        return getErrorResponseException(ProjectConstant.INVALID_TOKEN, HttpStatus.UNAUTHORIZED);
+    }
