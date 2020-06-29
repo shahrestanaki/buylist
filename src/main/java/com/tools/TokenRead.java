@@ -4,7 +4,6 @@ import com.exception.AppException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +16,7 @@ public class TokenRead {
             Authentication authentication = SecurityContextHolder.getContext()
                     .getAuthentication();
             String username = (String) authentication.getPrincipal();
-            return  username;
+            return username;
         } catch (Exception exp) {
             exp.printStackTrace();
             throw new AppException("general.error");
@@ -40,12 +39,11 @@ public class TokenRead {
             Authentication authentication = SecurityContextHolder.getContext()
                     .getAuthentication();
 
-            return ((OAuth2AuthenticationDetails)authentication.getDetails()).getTokenValue();
+            return ((OAuth2AuthenticationDetails) authentication.getDetails()).getTokenValue();
         } catch (Exception exp) {
             throw new AppException("token.error.Token");
         }
     }
-
 
     /**management*/
   /*  public static String getClientId() {

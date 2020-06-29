@@ -13,20 +13,16 @@ public class SearchCriteriaList {
     @JsonIgnore
     private HashSet<SearchCriteria> search = new HashSet<>();
     @Min(0L)
-    @JsonProperty("pageNumber")
+  //  @JsonProperty("pageNumber")
     private int page;
     @Min(5L)
     @Max(40L)
-    @JsonProperty("pageSize")
+  //  @JsonProperty("pageSize")
     private int size = 10;
-    private String sort ;
-
-    public SearchCriteriaList() {
-
-    }
+    private String sort;
 
     public SearchCriteriaList(int page, int size, String sort) {
-        this.page = page-1;
+        this.page = page - 1;
         this.size = size;
         this.sort = sort;
     }

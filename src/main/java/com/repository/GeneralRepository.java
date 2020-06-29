@@ -1,58 +1,46 @@
 package com.repository;
 
+import com.googlecode.jmapper.JMapper;
 import com.service.search.SearchCriteria;
 import com.service.search.SearchCriteriaList;
 import com.service.search.SearchSpecification;
 import com.view.SimplePageResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 @NoRepositoryBean
-public interface GeneralRepository<T, PK extends Serializable> extends JpaRepository<T, PK>, JpaSpecificationExecutor<T> {
+public interface GeneralRepository<M, V, PK extends Serializable> extends JpaRepository<M, PK>, JpaSpecificationExecutor<M> {
 
-    //Page<T> findAll(Specification<T> var1, Pageable var2);
+    //Page<M> findAll(Specification<M> var1, Pageable var2);
 
-    default SimplePageResponse<T> findAllCriteria(SearchCriteriaList search) {
-        Sort.Direction direction;
-        if (search.getSort().contains("desc")) {
-            direction = Sort.Direction.DESC;
-            search.setSort(search.getSort().replace("desc", ""));
-        } else {
-            direction = Sort.Direction.ASC;
-            search.setSort(search.getSort().replace("asc", ""));
-        }
-        //Pageable pageable = new PageRequest(search.getPage(), search.getSize(), new Sort(direction, search.getSort().trim()));
-        Pageable pageable = PageRequest.of(search.getPage(), search.getSize(), new Sort(direction, search.getSort().trim()));
-        //Pageable pageable = new PageRequest(search.getPage(), search.getSize());
-        SimplePageResponse<T> temp = new SimplePageResponse<>();
-        Specification<T> combinedSpecs = creatFilter(search.getSearch());
+    default SimplePageResponse<M> findAllCriteria(SearchCriteriaList search) {
+        SimplePageResponse<M> temp = new SimplePageResponse<>();
+        Specification<M> combinedSpecs = creatFilter(search.getSearch());
 
-        Page results = findAll(combinedSpecs, pageable);
-        List<T> educationFieldViews = results.getContent();
-        temp.setContent(educationFieldViews);
+        Page results = findAll(combinedSpecs, paging(search));
+        List<M> views = results.getContent();
+        temp.setContent(views);
         temp.setCount(results.getTotalElements());
         return temp;
     }
 
 
-    default Specification<T> creatFilter(HashSet<SearchCriteria> search) {
-        final Specification<T>[] combinedSpecs = new Specification[]{null};
+    default Specification<M> creatFilter(HashSet<SearchCriteria> search) {
+        final Specification<M>[] combinedSpecs = new Specification[]{null};
         search.stream().filter(item -> item.getValue() != null).forEach(item -> {
             if (item.getKey().contains(".")) {
                 combinedSpecs[0] = Specification.where(
                         (root, query, builder) -> {
                             String[] relation = item.getKey().split("\\.");
-                            //final Join<T, B> join = root.join(item.getKey().split("\\.")[0]);
+                            //final Join<M, B> join = root.join(item.getKey().split("\\.")[0]);
                             if (relation.length == 2) {
                                 return builder.or(
                                         builder.like(root.join(relation[0]).get(relation[1]), item.getValue().toString())
@@ -69,5 +57,29 @@ public interface GeneralRepository<T, PK extends Serializable> extends JpaReposi
             }
         });
         return combinedSpecs[0];
+    }
+
+    default SimplePageResponse<V> list(M t, JMapper<V, M> mapperToView, SearchCriteriaList search) {
+        Example<M> example = Example.of(t);
+        Page results = findAll(example, paging(search));
+
+        List<M> modelList = results.getContent();
+        List<V> viewList = new ArrayList<>();
+        modelList.forEach(item ->
+                viewList.add(mapperToView.getDestination(item))
+        );
+        return new SimplePageResponse<V>(viewList, results.getTotalElements());
+    }
+
+    default Pageable paging(SearchCriteriaList search) {
+        Sort.Direction direction;
+        if (search.getSort().contains("desc")) {
+            direction = Sort.Direction.DESC;
+            search.setSort(search.getSort().replace("desc", ""));
+        } else {
+            direction = Sort.Direction.ASC;
+            search.setSort(search.getSort().replace("asc", ""));
+        }
+        return PageRequest.of(search.getPage(), search.getSize(), new Sort(direction, search.getSort().trim()));
     }
 }

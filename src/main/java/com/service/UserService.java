@@ -57,7 +57,7 @@ public class UserService {
             throw new AppException("singup.novalid.code" + GeneralTools.createRandom(1, 3));
         } else {
             String password;
-            String username = GeneralTools.createRandom("all", 10) ;
+            String username = GeneralTools.createRandom("all", 10);
             try {
                 password = GeneralTools.decrypt(temp.getHashPassword(), PASSWORD_KEY);
             } catch (Exception e) {
@@ -147,5 +147,9 @@ public class UserService {
 
     private UsersView updateView(Users user) {
         return UserMapper.INSTANCE.map(userRepo.save(user));
+    }
+
+    public Users getCurrentUser() {
+        return getByUserName(TokenRead.getUserName());
     }
 }
