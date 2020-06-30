@@ -1,12 +1,12 @@
 package com.service;
 
 import com.enump.UserGroupRoleEnum;
+import com.exception.AppException;
 import com.googlecode.jmapper.JMapper;
 import com.model.Group;
 import com.model.UserGroup;
 import com.repository.GroupRepository;
 import com.service.search.SearchCriteriaList;
-import com.service.search.UserGroupService;
 import com.tools.GeneralTools;
 import com.view.GroupView;
 import com.view.SimplePageResponse;
@@ -50,5 +50,27 @@ public class GroupService extends GeneralService<Long, Group, GroupView> {
                 listView.add(mapperToView.getDestination(item))
         );
         return new SimplePageResponse<>(listView, page.getTotalElements());*/
+    }
+
+    public Group findByCode(String code) {
+        return groupRepo.findByCode(code);
+    }
+
+    public String inviteCode(long groupId) {
+        return securityGetGroup(groupId).getCode();
+    }
+
+    public void resetCode(long groupId) {
+        Group group = securityGetGroup(groupId);
+        group.setCode(GeneralTools.createRandom("all", 10));
+        groupRepo.save(group);
+    }
+
+    public Group securityGetGroup(long groupId) {
+        UserGroup userG = userGroupSrv.findByUserAndGroup(getUser().getId(), groupId);
+        if (userG == null) {
+            throw new AppException("security.check.conflict");
+        }
+        return userG.getGroup();
     }
 }

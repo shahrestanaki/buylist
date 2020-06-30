@@ -71,6 +71,8 @@ public class HandlerException extends ResponseEntityExceptionHandler {
                 params.put("message", "unique");
             } else if (error.contains("cannot be null")) {
                 params.put("message", "null value");
+            } else if (error.contains("Duplicate entry")) {
+                params.put("message", "Duplicate entry");
             }
             return new ResponseEntity(params, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception ex) {

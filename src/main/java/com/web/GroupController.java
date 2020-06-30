@@ -7,13 +7,9 @@ import com.view.SimplePageResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/group")
@@ -29,10 +25,22 @@ public class GroupController {
         return groupService.create(view);
     }
 
-    @ApiOperation(value = "create group")
+    @ApiOperation(value = "list of my group")
     @PostMapping("/list")
     public SimplePageResponse<GroupView> list(@Valid @RequestBody SearchCriteriaList search) {
         return groupService.list(search);
+    }
+
+    @ApiOperation(value = "get group invited code")
+    @GetMapping("invite")
+    public String inviteCode(@Valid @RequestParam(value = "id") long id) {
+        return groupService.inviteCode(id);
+    }
+
+    @ApiOperation(value = "reset group code")
+    @PostMapping("/reset-code")
+    public void resetCode(@Valid @RequestParam(value = "id") long id) {
+        groupService.resetCode(id);
     }
 
 }

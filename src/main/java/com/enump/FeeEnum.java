@@ -25,4 +25,7 @@ public enum FeeEnum {
         return comboList;
     }
 
+    public String getName() {
+        return name;
+    }
 }

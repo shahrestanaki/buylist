@@ -24,4 +24,8 @@ public enum UnitEnum {
         }
         return comboList;
     }
+
+    public String getName() {
+        return name;
+    }
 }

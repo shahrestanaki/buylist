@@ -7,9 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum UserGroupRoleEnum {
+    normal(PublicValue.NORMAL),
     Admin(PublicValue.ADMIN),
-    Manager(PublicValue.MANAGER),
-    normal(PublicValue.NORMAL);
+    Manager(PublicValue.MANAGER);
+
 
     private String name;
 

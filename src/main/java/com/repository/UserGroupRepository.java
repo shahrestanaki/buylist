@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserGroupRepository extends GeneralRepository<UserGroup, UserGroupView, Long> {
-
+    UserGroup findByUserIdAndGroupId(long userId , long groupId);
 }

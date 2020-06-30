@@ -1,13 +1,9 @@
 package com.model;
 
 import com.googlecode.jmapper.annotations.JMap;
-import com.view.GroupView;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -18,6 +14,7 @@ public class BaseEntity implements Serializable {
     @JMap
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_Date", nullable = false)
+
     public Date createDate;
 
     @JMap
@@ -25,8 +22,14 @@ public class BaseEntity implements Serializable {
     @Column(name = "change_Date")
     public Date changeDate;
 
-    public void setCreateDate(Date createDate) {
+    @PrePersist
+    public void prePersist() {
         this.createDate = new Date();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.changeDate = new Date();
     }
 
 }

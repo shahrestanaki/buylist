@@ -1,6 +1,9 @@
 package com.repository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.jmapper.JMapper;
+import com.model.BaseEntity;
+import com.model.BaseEntityView;
 import com.service.search.SearchCriteria;
 import com.service.search.SearchCriteriaList;
 import com.service.search.SearchSpecification;
@@ -12,14 +15,22 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @NoRepositoryBean
-public interface GeneralRepository<M, V, PK extends Serializable> extends JpaRepository<M, PK>, JpaSpecificationExecutor<M> {
+public interface GeneralRepository<M extends BaseEntity, V extends BaseEntityView, PK extends Serializable> extends JpaRepository<M, PK>, JpaSpecificationExecutor<M> {
 
     //Page<M> findAll(Specification<M> var1, Pageable var2);
+
+/*    default M saveModel(M m) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        HashMap hashMap = objectMapper.convertValue(m, HashMap.class);
+        Long id = Long.valueOf(hashMap.get("id").toString());
+        if (id > 0) {
+            m.changeDate = new Date();
+        }
+        return save(m);
+    }*/
 
     default SimplePageResponse<M> findAllCriteria(SearchCriteriaList search) {
         SimplePageResponse<M> temp = new SimplePageResponse<>();

@@ -34,7 +34,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 "/user/login",
                 "/user/forget-password",
                 "/user/confirm-singup",
-                "/user/logout"
+                "/user/logout",
+                "/general/**"
         ).permitAll();
         http.authorizeRequests().anyRequest().authenticated();
     }
