@@ -66,8 +66,8 @@ public class UserController {
         return userService.deleteMe();
     }
 
-    @GetMapping("/confirm-singup")
-    public UserGeneralResponse confirmSingup(@RequestParam(value = "code")  String code) {
-        return userService.confirmSingup(code);
+    @PostMapping("/confirm-singup")
+    public UserGeneralResponse confirmSingup(@Valid @RequestBody confirmSingupDto dto) {
+        return userService.confirmSingup(dto);
     }
 }

@@ -32,10 +32,6 @@ public class Users extends BaseEntity {
     @Column(name = "avatar", length = 20)
     private String avatar;
 
-    @JMap
-    @Column(name = "enabled", nullable = false)
-    private Boolean active;
-
     public Users() {
 
     }

@@ -9,5 +9,5 @@ public interface SingUpTempRepository extends GeneralRepository<SingUpTemp, Base
 
     SingUpTemp getByMobileAndSingDateStr(String mobile, String singDateStr);
 
-    SingUpTemp getByCodeAndSingDateStr(String code, String singDateStr);
+    SingUpTemp getByCodeAndMobileAndSingDateStr(String code,String mobile, String singDateStr);
 }

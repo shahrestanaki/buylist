@@ -43,7 +43,7 @@ public class Goods extends BaseEntity {
 
     @JMap
     @Column(name = "counts", nullable = false)
-    private float counts;
+    private Float counts;
 
     @JMap
     @Column(name = "unit", nullable = false)
@@ -69,11 +69,11 @@ public class Goods extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "buyer_id", insertable = false, updatable = false)
-    Users buyer;
+    UserGroup buyer;
 
     @JMap
     @Column(name = "buy")
-    private boolean buy;
+    private Boolean buy;
 
     @JMap
     @Column(name = "comment")

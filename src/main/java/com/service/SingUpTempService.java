@@ -42,8 +42,8 @@ public class SingUpTempService extends GeneralService {
         //TODO sendSms
     }
 
-    public SingUpTemp getByCodeAndSingDateStr(String code) {
-        return singUpTempRepo.getByCodeAndSingDateStr(code, CorrectDate.convertDate(new Date(), "-"));
+    public SingUpTemp getByCodeAndMobile(String code, String mobile) {
+        return singUpTempRepo.getByCodeAndMobileAndSingDateStr(code, mobile, CorrectDate.convertDate(new Date(), "-"));
     }
 
 

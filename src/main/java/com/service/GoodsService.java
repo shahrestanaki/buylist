@@ -1,20 +1,23 @@
 package com.service;
 
 import com.exception.AppException;
-import com.googlecode.jmapper.JMapper;
 import com.model.Goods;
 import com.repository.GoodsRepository;
+import com.service.mapper.MapperGoods;
+import com.service.search.GoodsSearch;
 import com.view.BuyGoodsDto;
 import com.view.GoodsView;
+import com.view.SimplePageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class GoodsService extends GeneralService<Long, Goods, GoodsView> {
-    JMapper<Goods, GoodsView> mapper = new JMapper<>(Goods.class, GoodsView.class);
-    JMapper<GoodsView, Goods> mapperToView = new JMapper<>(GoodsView.class, Goods.class);
+
     @Autowired
     private GoodsRepository goodsRepo;
 
@@ -25,7 +28,8 @@ public class GoodsService extends GeneralService<Long, Goods, GoodsView> {
         view.setId(null);
         view.setBuy(false);
         checkAccessToGroup(view.getGroupId());
-        return mapperToView.getDestination(goodsRepo.save(mapper.getDestination(view)));
+        Goods goods = goodsRepo.save(MapperGoods.mapperToModel().map(view, Goods.class));
+        return MapperGoods.mapper().map(goods, GoodsView.class);
     }
 
     private void checkAccessToGroup(long groupId) {
@@ -40,13 +44,37 @@ public class GoodsService extends GeneralService<Long, Goods, GoodsView> {
         checkAccessToGroup(goods.get().getGroupId());
         if (obj.isBuy()) {
             goods.get().setBuy(true);
-            goods.get().setBuyerId(getUser().getId());
+            goods.get().setBuyerId(getUserGroup(goods.get().getGroupId()).getId());
         } else {
-            if (goods.get().getBuyerId().equals(getUser().getId())) {
+            if (goods.get().getBuyerId().equals(getUserGroup(goods.get().getGroupId()).getId())) {
                 goods.get().setBuy(false);
                 goods.get().setBuyerId(null);
             }
         }
         goodsRepo.save(goods.get());
+    }
+
+    public SimplePageResponse<GoodsView> list(GoodsSearch search) {
+        checkAccessToGroup(search.getGroupId());
+
+        Goods goods = new Goods();
+        goods.setGroupId(search.getGroupId());
+
+        SimplePageResponse<GoodsView> result = new SimplePageResponse<>();
+        List<GoodsView> listView = new ArrayList<>();
+        goodsRepo.list(goods, search).getContent().forEach(item ->
+                listView.add(MapperGoods.mapper().map(item, GoodsView.class))
+        );
+        result.setContent(listView);
+        result.setCount(listView.size());
+        return result;
+
+    }
+
+    public SimplePageResponse<Goods> listModel(GoodsSearch search) {
+        checkAccessToGroup(search.getGroupId());
+        Goods goods = new Goods();
+        goods.setGroupId(search.getGroupId());
+        return goodsRepo.list(goods, search);
     }
 }

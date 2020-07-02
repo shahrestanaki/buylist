@@ -19,7 +19,7 @@ public class GoodsView extends BaseEntityView {
     @JMap
     private String name;
     @JMap
-    private float counts;
+    private Float counts;
     @JMap
     private UnitEnum unit;
     // @JMap
@@ -33,9 +33,12 @@ public class GoodsView extends BaseEntityView {
     // @JMap
     private String unitFeeName;
     @JMap
-    private boolean buy;
+    private Boolean buy;
     @JMap
     private Long buyerId;
+    private String buyerName;
+    private String buyerAvatar;
+
     @JMap
     private String comment;
 

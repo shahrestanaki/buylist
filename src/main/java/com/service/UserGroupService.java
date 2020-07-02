@@ -7,8 +7,12 @@ import com.model.Group;
 import com.model.UserGroup;
 import com.repository.UserGroupRepository;
 import com.view.UserGroupView;
+import com.view.UsersAndRolesDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserGroupService extends GeneralService<Long, UserGroup, UserGroupView> {
@@ -39,5 +43,59 @@ public class UserGroupService extends GeneralService<Long, UserGroup, UserGroupV
 
     public UserGroup findByUserAndGroup(long userId, long groupId) {
         return userGroupRepo.findByUserIdAndGroupId(userId, groupId);
+    }
+
+    public boolean userIsAdminOfGroup(long userId, long groupId) {
+        UserGroup userGroup = userGroupRepo.findByUserIdAndGroupId(userId, groupId);
+        if (userGroup != null && userGroup.getRole().equals(UserGroupRoleEnum.Admin)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean userIsManagerOfGroup(long userId, long groupId) {
+        UserGroup userGroup = userGroupRepo.findByUserIdAndGroupId(userId, groupId);
+        if (userGroup.getRole().equals(UserGroupRoleEnum.Manager)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public List<UsersAndRolesDto> userRolesWithOutAdmin(long groupId) {
+        return userGroupRepo.userRolesWithOutAdmin(groupId);
+    }
+
+    public UserGroup getAdmin(long groupId) {
+        return userGroupRepo.userAdmin(groupId);
+    }
+
+
+    public void changeUsersRole(long groupId, List<UsersAndRolesDto> newRoles) {
+        List<UsersAndRolesDto> oldRoles = userRolesWithOutAdmin(groupId);
+        oldRoles.forEach(old ->
+                newRoles.forEach(newr -> {
+                    if (old.getUserId() == newr.getUserId() && old.getRole() != newr.getRole()) {
+                        updateUserRole(groupId, old.getUserId(), newr.getRole());
+                    }
+                })
+        );
+    }
+
+
+    public void changeAdmin(long groupId, long userId) {
+        updateUserRole(groupId, userId, UserGroupRoleEnum.Admin);
+    }
+
+    public void updateUserRole(long groupId, long userId, UserGroupRoleEnum role) {
+        userGroupRepo.updateUserRole(groupId, userId, role);
+    }
+
+    public List<UserGroup> getAllbyUserId(Long userId) {
+        UserGroup obj = new UserGroup();
+        obj.setUserId(userId);
+        Example<UserGroup> ex = Example.of(obj);
+        return userGroupRepo.findAll(ex);
     }
 }

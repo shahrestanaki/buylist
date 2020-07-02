@@ -4,7 +4,6 @@ import com.exception.AppException;
 import com.model.SingUpTemp;
 import com.model.Users;
 import com.repository.UserRepository;
-import com.service.mapper.UserMapper;
 import com.tools.GeneralTools;
 import com.tools.TokenRead;
 import com.view.*;
@@ -51,8 +50,8 @@ public class UserService {
         }
     }
 
-    public UserGeneralResponse confirmSingup(String code) {
-        SingUpTemp temp = singUpTempSrv.getByCodeAndSingDateStr(code);
+    public UserGeneralResponse confirmSingup(confirmSingupDto dto) {
+        SingUpTemp temp = singUpTempSrv.getByCodeAndMobile(dto.getCode(), dto.getMobile());
         if (temp == null) {
             throw new AppException("singup.novalid.code" + GeneralTools.createRandom(1, 3));
         } else {
@@ -107,7 +106,7 @@ public class UserService {
     }
 
     public UsersView info() {
-        return UserMapper.INSTANCE.map(getByUserName());
+        return null;///////////////UserMapper.INSTANCE.map(getByUserName());
     }
 
     public UsersView update(UsersUpdateView view) {
@@ -146,7 +145,7 @@ public class UserService {
     }
 
     private UsersView updateView(Users user) {
-        return UserMapper.INSTANCE.map(userRepo.save(user));
+        return null;///////////////UserMapper.INSTANCE.map(userRepo.save(user));
     }
 
     public Users getCurrentUser() {

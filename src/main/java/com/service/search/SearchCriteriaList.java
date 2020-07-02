@@ -26,4 +26,6 @@ public class SearchCriteriaList {
         this.size = size;
         this.sort = sort;
     }
+
+    public SearchCriteriaList(){}
 }

@@ -102,6 +102,12 @@
             <artifactId>jmapper-core</artifactId>
             <version>1.6.0.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>ma.glasnost.orika</groupId>
+            <artifactId>orika-core</artifactId>
+            <version>1.5.2</version>
+        </dependency>
     </dependencies>
 
     <build>

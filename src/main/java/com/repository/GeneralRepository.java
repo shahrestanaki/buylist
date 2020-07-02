@@ -1,6 +1,5 @@
 package com.repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.jmapper.JMapper;
 import com.model.BaseEntity;
 import com.model.BaseEntityView;
@@ -15,7 +14,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 @NoRepositoryBean
 public interface GeneralRepository<M extends BaseEntity, V extends BaseEntityView, PK extends Serializable> extends JpaRepository<M, PK>, JpaSpecificationExecutor<M> {
@@ -82,6 +83,14 @@ public interface GeneralRepository<M extends BaseEntity, V extends BaseEntityVie
         return new SimplePageResponse<V>(viewList, results.getTotalElements());
     }
 
+    default SimplePageResponse<M> list(M m, SearchCriteriaList search) {
+        Example<M> example = Example.of(m);
+        Page results = findAll(example, paging(search));
+
+        List<M> modelList = results.getContent();
+        return new SimplePageResponse<M>(modelList, results.getTotalElements());
+    }
+
     default Pageable paging(SearchCriteriaList search) {
         Sort.Direction direction;
         if (search.getSort().contains("desc")) {
@@ -93,4 +102,5 @@ public interface GeneralRepository<M extends BaseEntity, V extends BaseEntityVie
         }
         return PageRequest.of(search.getPage(), search.getSize(), new Sort(direction, search.getSort().trim()));
     }
+
 }
