@@ -1,6 +1,5 @@
 package com.view;
 
-import com.model.Goods;
 import com.model.Group;
 import lombok.Data;
 

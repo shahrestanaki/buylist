@@ -1,6 +1,7 @@
 package com.web;
 
 import com.service.UserGroupService;
+import com.tools.EnglishAndNumber;
 import com.view.UserGroupView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,7 +23,7 @@ public class UserGroupController {
 
     @ApiOperation(value = "create group")
     @PostMapping("/joinToGroup")
-    public UserGroupView joinToGroup(@Valid @RequestParam(value = "code") String code) {
+    public UserGroupView joinToGroup(@Valid @RequestParam(value = "code")@EnglishAndNumber String code) {
         return userGroupService.joinToGroup(code);
     }
 }

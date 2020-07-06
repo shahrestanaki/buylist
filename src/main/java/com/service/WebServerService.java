@@ -1,6 +1,7 @@
 package com.service;
 
 import com.exception.AppException;
+import com.tools.PublicValue;
 import com.tools.TokenRead;
 import com.view.*;
 import com.webservice.CoreTokenManage;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class WebServerService {
-    private static final String CORE_URL = "http://localhost:8080/core/";
+    private static final String CORE_URL = PublicValue.CORE_URL;
 
     private HttpHeaders getHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();

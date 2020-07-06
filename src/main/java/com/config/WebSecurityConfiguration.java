@@ -27,5 +27,4 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         ).permitAll();
         http.authorizeRequests().anyRequest().authenticated();
     }
-
 }

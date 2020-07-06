@@ -32,7 +32,7 @@ public class Group extends BaseEntity {
     private String code;
 
     @JMap
-    @Column(name = "about", length = 50)
+    @Column(name = "about", length = 255)
     private String about;
 
     @JMap

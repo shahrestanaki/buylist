@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.Length;
 public class LoginDto {
     @Mobile
     private String mobile;
-    @Length(min = 5, max = 20)
+    @Length(min = 5, max = 20, message = "لطفا برای رمزعبور بین {min} و {max} حرف وارد نمایید")
     private String password;
 
     @JsonIgnore
