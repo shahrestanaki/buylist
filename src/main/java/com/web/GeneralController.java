@@ -1,6 +1,7 @@
 package com.web;
 
 import com.enump.FeeEnum;
+import com.enump.MessageEnum;
 import com.enump.UnitEnum;
 import com.view.Combo;
 import io.swagger.annotations.Api;
@@ -27,6 +28,12 @@ public class GeneralController {
     @GetMapping("/goods-fee")
     public List<Combo> goodsFee() {
         return FeeEnum.getList();
+    }
+
+    @ApiOperation(value = "message type")
+    @GetMapping("/message-type")
+    public List<Combo> messageCombo() {
+        return MessageEnum.getList();
     }
 
 }

@@ -22,7 +22,6 @@ public class UserService {
     @Autowired
     private SingUpTempService singUpTempSrv;
 
-
     @Autowired
     private WebServerService webServerSrv;
 
@@ -151,4 +150,5 @@ public class UserService {
     public Users getCurrentUser() {
         return getByUserName(TokenRead.getUserName());
     }
+
 }

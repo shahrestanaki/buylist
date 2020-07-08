@@ -14,12 +14,12 @@ import javax.validation.constraints.Pattern;
 public class UsersUpdateView extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    @Pattern(regexp = OnlyLetter.PATTERN, message = "برای نام مستعار از حروف و عدد استفاده نمایید")
-    @Length(min = 5, max = 20, message = "لطفا برای کد بین {min} و {max} حرف وارد نمایید")
+    @Pattern(regexp = OnlyLetter.PATTERN,message = "برای نام کاربریت علائم ,.(),،_: رو به جز حرف های معمول قبول داریم")
+    @Length(min = 5, max = 20, message = "برای نام کاربریت بین {min} و {max} حرف وارد کن")
     private String nickName;
 
-    @Length(min = 1, max = 5, message = "لطفا برای آواتار بین {min} و {max} حرف وارد نمایید")
-    @Pattern(regexp = INumber.PATTERN, message = "نوع داده وارد شده برای آواتار باید عددی باشد")
+    @Length(min = 1, max = 5, message = "برای عکس کاربرت بین {min} و {max} حرف وارد کن")
+    @Pattern(regexp = INumber.PATTERN, message = "نوع داده وارد شده برای عکس کاربری باید عددی باشه")
     private String avatar;
 
 }

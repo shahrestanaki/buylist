@@ -6,11 +6,13 @@ import org.hibernate.validator.constraints.Length;
 @Data
 public class ChangePasswordDto {
 
-    @Length(min = 5, max = 20, message = "لطفا برای رمزعبور قدیمی بین {min} و {max} حرف وارد نمایید")
+    @Length(min = 5, max = 20, message = "رمزعبور قدیمی باید حداقل {min} و حداکثر {max} حرف داشته باشه")
     private String oldPassword;
-    @Length(min = 5, max = 20, message = "لطفا برای رمزعبور جدید بین {min} و {max} حرف وارد نمایید")
+
+    @Length(min = 5, max = 20, message = "رمزعبور جدید باید حداقل {min} و حداکثر {max} حرف داشته باشه")
     private String newPassword;
-    @Length(min = 5, max = 20, message = "لطفا برای تکرار رمزعبور بین {min} و {max} حرف وارد نمایید")
+
+    @Length(min = 5, max = 20, message = "تکرار رمزعبور باید حداقل {min} و حداکثر {max} حرف داشته باشه")
     private String repeatPassword;
 
 }

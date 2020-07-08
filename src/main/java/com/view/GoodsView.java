@@ -11,6 +11,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
@@ -18,44 +19,49 @@ import java.util.Date;
 public class GoodsView extends BaseEntityView {
     @JMap
     private Long id;
+
     @JMap
+    @NotNull
     private Long groupId;
+
     @JMap
-    private Date dateList;
+    @NotNull
+    private String dateList;
+
     @JMap
-    @Length(min = 2, max = 20, message = "برای نام کالا بین {min} و {max} حرف وارد نمایید")
-    @Pattern(regexp= PersianOnly.PATTERN,message = "برای نام کالا تنها از حروف فارسی استفاده نمایید")
+    @Length(min = 2, max = 20, message = "نام کالا باید حداقل {min} و حداکثر {max} حرف داشته باشه")
+    @Pattern(regexp= PersianOnly.PATTERN,message = "برای نام کالا فقط از حروف فارسی استفاده کن")
     private String name;
+
     @JMap
-    @Max(value = 1000 , message = "حداکثر تعداد کالا {value} باید باشد")
-    //@Min(value = 1 , message = "حداقل تعداد کالا {value} باید باشد")
+    @Max(value = 1000 , message = "حداکثر تعداد کالا رو می تونی {value} وارد کنی")
+    @NotNull
     private Float counts;
+
     @JMap
+    @NotNull
     private UnitEnum unit;
-    // @JMap
     private String unitName;
-    @JMap
 
-    //@Min(value = 1 , message = "حداقل قیمت کالا {value} باید باشد")
+    @JMap
     private Integer minFee;
-    @JMap
 
-    @Max(value = 100000000 , message = "حداکثر قیمت کالا {value} باید باشد")
+    @JMap
+    @Max(value = 100000000 , message = "قیمت کالا از {value} نمیتونه بیشتر باشه")
     private Integer maxFee;
+
     @JMap
     private FeeEnum unitFee;
-    // @JMap
     private String unitFeeName;
-    @JMap
+
     private Boolean buy;
-    @JMap
     private Long buyerId;
     private String buyerName;
     private String buyerAvatar;
 
     @JMap
-    @Length(min = 5, max = 255, message = "برای توضیحات کالا بین {min} و {max} حرف وارد نمایید")
-    @Pattern(regexp= PersianOnly.PATTERN,message = "برای توضیحات کالا تنها از حروف فارسی استفاده نمایید")
+    @Length(min = 5, max = 255, message = "برای توضیحات کالا بین {min} و {max} حرف وارد کن")
+    @Pattern(regexp= PersianOnly.PATTERN,message = "برای توضیحات کالا تنها از حروف فارسی استفاده کن")
     private String comment;
 
     public void setUnit(UnitEnum unit) {

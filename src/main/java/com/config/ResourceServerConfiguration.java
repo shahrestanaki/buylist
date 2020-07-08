@@ -9,18 +9,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @EnableResourceServer
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
-  /*  private final TokenStore tokenStore;
-
-    public ResourceServerConfiguration(final TokenStore tokenStore) {
-        this.tokenStore = tokenStore;
-    }
-*/
-    /*@Override
-    public void configure(final ResourceServerSecurityConfigurer resources) {
-        resources.tokenStore(tokenStore);
-    }*/
-
-    //----------------------------------
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         // http.authorizeRequests().antMatchers("/v2/api-docs", "/configuration/**", "/swagger-resources/**",  "/swagger-ui.html", "/webjars/**", "/api-docs/**").authenticated();
@@ -35,7 +23,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 "/user/forget-password",
                 "/user/confirm-singup",
                 "/user/logout",
-                "/general/**"
+                "/general/**",
+                "/message/send-message",
+                "/message//load-by-ticket"
         ).permitAll();
         http.authorizeRequests().anyRequest().authenticated();
     }

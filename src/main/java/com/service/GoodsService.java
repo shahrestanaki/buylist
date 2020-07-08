@@ -5,6 +5,7 @@ import com.model.Goods;
 import com.repository.GoodsRepository;
 import com.service.mapper.MapperGoods;
 import com.service.search.GoodsSearch;
+import com.tools.CorrectDate;
 import com.view.BuyGoodsDto;
 import com.view.GoodsView;
 import com.view.SimplePageResponse;
@@ -59,6 +60,7 @@ public class GoodsService extends GeneralService<Long, Goods, GoodsView> {
 
         Goods goods = new Goods();
         goods.setGroupId(search.getGroupId());
+        goods.setDateList(CorrectDate.miladiToShamsi(search.getDate(),"/"));
 
         SimplePageResponse<GoodsView> result = new SimplePageResponse<>();
         List<GoodsView> listView = new ArrayList<>();

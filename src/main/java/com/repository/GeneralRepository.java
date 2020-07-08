@@ -100,7 +100,7 @@ public interface GeneralRepository<M extends BaseEntity, V extends BaseEntityVie
             direction = Sort.Direction.ASC;
             search.setSort(search.getSort().replace("asc", ""));
         }
-        return PageRequest.of(search.getPage(), search.getSize(), new Sort(direction, search.getSort().trim()));
+        return PageRequest.of(search.getPage() - 1, search.getSize(), new Sort(direction, search.getSort().trim()));
     }
 
 }

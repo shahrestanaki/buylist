@@ -16,4 +16,7 @@ public class PublicValue {
     public static final String ADMIN = "ایجادکننده";
     public static final String MANAGER = "مدیر";
     public static final String NORMAL = "عادی";
+    public static final String MESSAGE_ERROR = "مشکلات برنامه";
+    public static final String MESSAGE_COMMON = "درد دل";
+    public static final String MESSAGE_BUSINESS = "پیشنهاد همکاری";
 }

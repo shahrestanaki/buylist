@@ -7,7 +7,6 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Data
@@ -35,7 +34,7 @@ public class Goods extends BaseEntity {
 
     @JMap
     @Column(name = "date_list", nullable = false)
-    private Date dateList;
+    private String dateList;
 
     @JMap
     @Column(name = "name", length = 50, nullable = false)
