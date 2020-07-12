@@ -27,7 +27,14 @@ public class CorrectDate {
     public static String miladiToShamsi(Date date, String format) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        return cal.get(Calendar.YEAR) + format + (cal.get(Calendar.MONTH) + 1) + format + cal.get(Calendar.DAY_OF_MONTH);
+        String[] newDate = new String[]{"" + cal.get(Calendar.YEAR), "" + (cal.get(Calendar.MONTH) + 1), "" + cal.get(Calendar.DAY_OF_MONTH)};
+        if (newDate[1].length() == 1) {
+            newDate[1] = "0" + newDate[1];
+        }
+        if (newDate[2].length() == 1) {
+            newDate[2] = "0" + newDate[2];
+        }
+        return String.join(format, newDate);
     }
 
     public static String shamsiToMiladi(String shamsi) {
@@ -37,4 +44,5 @@ public class CorrectDate {
 
         return df.format(calendar);
     }
+
 }

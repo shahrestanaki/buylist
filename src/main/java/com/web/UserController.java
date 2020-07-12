@@ -1,7 +1,10 @@
 package com.web;
 
 import com.service.UserService;
+import com.tools.GeneralTools;
+import com.tools.GetResourceBundle;
 import com.view.*;
+import com.webservice.sms.SmsSend;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,4 +72,12 @@ public class UserController {
     public UserGeneralResponse confirmSingup(@Valid @RequestBody confirmSingupDto dto) {
         return userService.confirmSingup(dto);
     }
+
+  /*  //@ApiIgnore
+    @GetMapping("/sms")
+    public boolean sms() {
+        SmsSend.getInstance().sendSms("09127205789", GeneralTools.createRandom("number", 5),
+                GetResourceBundle.getConfig.getString("sms.singup.TemplateId"));
+        return true;
+    }*/
 }

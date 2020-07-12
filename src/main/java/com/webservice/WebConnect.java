@@ -4,12 +4,21 @@ import com.exception.AppException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.tools.GeneralTools;
+import com.tools.GetResourceBundle;
 import com.tools.PublicValue;
 import com.view.CoreLoginRequest;
 import com.view.CoreLoginResponse;
 import com.view.WebErrorDto;
+import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -22,7 +31,6 @@ public class WebConnect {
     static RestTemplate restTemplate = new RestTemplate();
 
     public static CoreLoginResponse loginCore(CoreLoginRequest loginRequest) {
-
         HttpHeaders headers = createLoginHeaders(PublicValue.CORE_CLIENT_ID, PublicValue.CORE_SECRET);
         RestTemplate restTemplate = new RestTemplate();
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(PublicValue.CORE_URL_LOGIN);
@@ -63,11 +71,22 @@ public class WebConnect {
         return builder;
     }
 
+    public static <R> R getObjectWithProxy(String url, HttpMethod type, HttpEntity httpHeader, Class<R> responseType) {
+        if (GetResourceBundle.getConfig.getString("proxy.use").equals("true")) {
+            return getObjectGeneral(url, type, httpHeader, responseType, restTemplateProxy());
+        } else {
+            return getObjectGeneral(url, type, httpHeader, responseType, restTemplate);
+        }
+    }
 
     public static <R> R getObject(String url, HttpMethod type, HttpEntity httpHeader, Class<R> responseType) {
+        return getObjectGeneral(url, type, httpHeader, responseType, restTemplate);
+    }
+
+    private static <R> R getObjectGeneral(String url, HttpMethod type, HttpEntity httpHeader, Class<R> responseType, RestTemplate restTemp) {
         ResponseEntity<R> responseEntity = null;
         try {
-            responseEntity = restTemplate.exchange(url, type, httpHeader, responseType);
+            responseEntity = restTemp.exchange(url, type, httpHeader, responseType);
         } catch (Exception e) {
             handelWebError(e);
         }
@@ -83,7 +102,6 @@ public class WebConnect {
             throw new AppException("error in get response");
         }
     }
-
 
     private static void handelWebError(Exception e) {//TODO log for users
         e.printStackTrace();
@@ -122,7 +140,29 @@ public class WebConnect {
         throw new AppException(error);
     }
 
+    public static RestTemplate restTemplateProxy() {
+        final String username = GetResourceBundle.getConfig.getString("proxy.username");
+        final String password = GetResourceBundle.getConfig.getString("proxy.password");
+        final String proxyUrl = GetResourceBundle.getConfig.getString("proxy.url");
+        final int port = Integer.valueOf(GetResourceBundle.getConfig.getString("proxy.port"));
 
+        CredentialsProvider credsProvider = new BasicCredentialsProvider();
+        credsProvider.setCredentials(
+                new AuthScope(proxyUrl, port),
+                new UsernamePasswordCredentials(username, password)
+        );
+
+        HttpHost myProxy = new HttpHost(proxyUrl, port);
+        HttpClientBuilder clientBuilder = HttpClientBuilder.create();
+
+        clientBuilder.setProxy(myProxy).setDefaultCredentialsProvider(credsProvider).disableCookieManagement();
+
+        HttpClient httpClient = clientBuilder.build();
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+        factory.setHttpClient(httpClient);
+
+        return new RestTemplate(factory);
+    }
 
 
       /*public static ResponseEntity<String> getEntity(String url) {

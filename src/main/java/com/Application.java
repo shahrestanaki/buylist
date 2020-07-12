@@ -26,6 +26,7 @@ public class Application {
         System.out.println("-------------------- Application start in " + new Date() + " ----------------------");
     }
 
+
     @Bean
     public ServletWebServerFactory servletContainer() {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
@@ -51,4 +52,5 @@ public class Application {
         connector.setRedirectPort(8443);
         return connector;
     }
+
 }

@@ -20,5 +20,5 @@ public @interface EnglishAndNumber {
 	Class<?>[] groups() default {};
 	Class<? extends Payload>[] payload() default {};
 	
-	String PATTERN = "^[a-z A-Z]*$";
+	String PATTERN = "^[a-z A-Z0-9]*$";
 }

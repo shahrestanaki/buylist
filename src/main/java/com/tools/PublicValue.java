@@ -19,4 +19,6 @@ public class PublicValue {
     public static final String MESSAGE_ERROR = "مشکلات برنامه";
     public static final String MESSAGE_COMMON = "درد دل";
     public static final String MESSAGE_BUSINESS = "پیشنهاد همکاری";
+    public static final String SMS_URL_LOGIN = "http://RestfulSms.com/api/Token";
+    public static final String SMS_URL_SEND_SMS= "http://RestfulSms.com/api/UltraFastSend";
 }

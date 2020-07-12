@@ -1,12 +1,16 @@
 package com.service;
 
+import com.enump.SmsTypeEnum;
 import com.exception.AppException;
 import com.model.SingUpTemp;
+import com.model.SmsHistory;
 import com.model.Users;
 import com.repository.UserRepository;
 import com.tools.GeneralTools;
+import com.tools.GetResourceBundle;
 import com.tools.TokenRead;
 import com.view.*;
+import com.webservice.sms.SmsSend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    private final int MAX_SINGUP_SMS = 3;
+    private final int MAX_SINGUP_SMS = Integer.valueOf(GetResourceBundle.getConfig.getString("MAX_SMS_SEND_USER"));
     private final String PASSWORD_KEY = "MKt7Y6qw7ACk5Crk";
     @Autowired
     private UserRepository userRepo;
@@ -24,6 +28,9 @@ public class UserService {
 
     @Autowired
     private WebServerService webServerSrv;
+
+    @Autowired
+    private SmsHistoryService smsHistorySrv;
 
     public UserGeneralResponse singup(SingUpDto singUp) {
         if (!singUp.getPassword().equals(singUp.getRepeatPassword())) {
@@ -41,9 +48,9 @@ public class UserService {
         }
         SingUpTemp temp = singUpTempSrv.getTodaySingUp(singUp.getMobile());
         if (temp == null || temp.getCounts() <= MAX_SINGUP_SMS) {
-            String code = singUpTempSrv.sendSmsSingUp(temp, singUp);
-            //TODO  return new UserGeneralResponse(HttpStatus.OK);
-            return new UserGeneralResponse(HttpStatus.OK, code);
+            singUpTempSrv.sendSmsSingUp(temp, singUp);
+            return new UserGeneralResponse(HttpStatus.OK);
+            //return new UserGeneralResponse(HttpStatus.OK, code);
         } else {
             throw new AppException("singup.max.in.today");
         }
@@ -81,13 +88,27 @@ public class UserService {
     }
 
     public UserGeneralResponse forgetPassword(ForgetPasswordDto forgetPasswordDto) {
+        long smsCount = smsHistorySrv.smsCountByMobile(forgetPasswordDto.getMobile());
+        if (smsCount >= MAX_SINGUP_SMS) {
+            return new UserGeneralResponse(HttpStatus.OK);
+        }
         Users user = getByMobile(forgetPasswordDto.getMobile());
         if (user == null) {
-            throw new AppException("forgetPassword.novalid.mobile");
+            return new UserGeneralResponse(HttpStatus.OK);
+            //throw new AppException("forgetPassword.novalid.mobile");
         }
+
+        //TODO compare with date SingUp
         String newPassword = webServerSrv.forgetPassword(user.getUserName());
-        // TODO Send sms password
-        return new UserGeneralResponse(HttpStatus.OK, newPassword);
+        sendImmediatelySmsForgetPassword(user.getMobile(), newPassword);
+        return new UserGeneralResponse(HttpStatus.OK);
+    }
+
+    private void sendImmediatelySmsForgetPassword(String mobile, String password) {
+        SmsSend.getInstance().sendSms(mobile, password,
+                GetResourceBundle.getConfig.getString("sms.forgetPassword.TemplateId"));
+        SmsHistory smsHistory = new SmsHistory(SmsTypeEnum.FORGET_PASSWORD, mobile, password);
+        smsHistorySrv.log(smsHistory);
     }
 
     public UserGeneralResponse changePassword(ChangePasswordDto changePasswordDto) {
