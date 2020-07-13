@@ -2,6 +2,7 @@ package com.exception;
 
 import com.enump.ErrorEnum;
 import com.tools.CorrectDate;
+import com.tools.GetResourceBundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -80,5 +82,33 @@ public class HandlerException extends ResponseEntityExceptionHandler {
 
         e.printStackTrace();
         return new ResponseEntity(params, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ToManyRequestException.class)
+    public final ResponseEntity<Object> handleToManyRequestException(ToManyRequestException ex) {
+        Map<String, String> params = new HashMap<>();
+        params.put("code", ErrorEnum.ValidateSystem.toString());
+        params.put("timestamp", CorrectDate.dateTimeZone(new Date()));
+        try {
+            String temp = GetResourceBundle.getMessage_fa.getString("error.ToManyRequest."+ex.getMessage());
+            params.put("message", new String(temp.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
+        } catch (NoClassDefFoundError | Exception e) {
+            params.put("message", "To Many Request");
+        }
+
+        return new ResponseEntity(params, HttpStatus.TOO_MANY_REQUESTS);
+    }
+
+    public final ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex) {
+        Map<String, String> params = new HashMap<>();
+        params.put("code", ErrorEnum.ValidateSystem.toString());
+        params.put("timestamp", CorrectDate.dateTimeZone(new Date()));
+        try {
+            String temp = GetResourceBundle.getMessage_fa.getString("error.AccessDenied");
+            params.put("message", new String(temp.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
+        } catch (NoClassDefFoundError | Exception e) {
+            params.put("message", "Access Denied");
+        }
+        return new ResponseEntity(params, HttpStatus.FORBIDDEN);
     }
 }
