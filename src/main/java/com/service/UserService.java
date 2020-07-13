@@ -6,6 +6,7 @@ import com.model.SingUpTemp;
 import com.model.SmsHistory;
 import com.model.Users;
 import com.repository.UserRepository;
+import com.tools.CorrectDate;
 import com.tools.GeneralTools;
 import com.tools.GetResourceBundle;
 import com.tools.TokenRead;
@@ -16,9 +17,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.Date;
+
 @Service
 public class UserService {
     private final int MAX_SINGUP_SMS = Integer.valueOf(GetResourceBundle.getConfig.getString("MAX_SMS_SEND_USER"));
+    private final int MAX_SMS_FOGOT_USER = Integer.valueOf(GetResourceBundle.getConfig.getString("MAX_SMS_FOGOT_USER"));
     private final String PASSWORD_KEY = "MKt7Y6qw7ACk5Crk";
     @Autowired
     private UserRepository userRepo;
@@ -89,18 +94,21 @@ public class UserService {
 
     public UserGeneralResponse forgetPassword(ForgetPasswordDto forgetPasswordDto) {
         long smsCount = smsHistorySrv.smsCountByMobile(forgetPasswordDto.getMobile());
-        if (smsCount >= MAX_SINGUP_SMS) {
-            return new UserGeneralResponse(HttpStatus.OK);
+        if (smsCount >= MAX_SMS_FOGOT_USER) {
+            throw new AppException("sms.max.limit." + GeneralTools.createRandom(1, 3));
         }
         Users user = getByMobile(forgetPasswordDto.getMobile());
         if (user == null) {
             return new UserGeneralResponse(HttpStatus.OK);
-            //throw new AppException("forgetPassword.novalid.mobile");
+        }
+        Date before = CorrectDate.changeDate(forgetPasswordDto.getSingUpDate(), -10, Calendar.DATE);
+        Date after = CorrectDate.changeDate(forgetPasswordDto.getSingUpDate(), 10, Calendar.DATE);
+
+        if (user.getCreateDate().after(before) && user.getCreateDate().before(after)) {
+            String newPassword = webServerSrv.forgetPassword(user.getUserName());
+            sendImmediatelySmsForgetPassword(user.getMobile(), newPassword);
         }
 
-        //TODO compare with date SingUp
-        String newPassword = webServerSrv.forgetPassword(user.getUserName());
-        sendImmediatelySmsForgetPassword(user.getMobile(), newPassword);
         return new UserGeneralResponse(HttpStatus.OK);
     }
 

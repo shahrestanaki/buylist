@@ -45,4 +45,10 @@ public class CorrectDate {
         return df.format(calendar);
     }
 
+    public static Date changeDate(Date date, int number, int unit) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(unit, number);
+        return cal.getTime();
+    }
 }
