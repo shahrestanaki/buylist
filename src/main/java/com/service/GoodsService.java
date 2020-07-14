@@ -60,7 +60,8 @@ public class GoodsService extends GeneralService<Long, Goods, GoodsView> {
 
         Goods goods = new Goods();
         goods.setGroupId(search.getGroupId());
-        goods.setDateList(CorrectDate.miladiToShamsi(search.getDate(),"/"));
+        //goods.setDateList(CorrectDate.miladiToShamsi(search.getDate(),"/"));
+        goods.setDateList(search.getDateFa());
 
         SimplePageResponse<GoodsView> result = new SimplePageResponse<>();
         List<GoodsView> listView = new ArrayList<>();

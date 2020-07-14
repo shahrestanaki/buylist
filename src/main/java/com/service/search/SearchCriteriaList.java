@@ -22,7 +22,7 @@ public class SearchCriteriaList {
     private String sort;
 
     public SearchCriteriaList(int page, int size, String sort) {
-        this.page = page - 1;
+        this.page = page;
         this.size = size;
         this.sort = sort;
     }
