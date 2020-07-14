@@ -32,12 +32,12 @@ public class SmsSend {
         Gson gson = new Gson();
         HttpEntity<String> request = new HttpEntity<>(gson.toJson(map), getHttpHeadersAuthorization(getToken()));
         try {
-           // SmsSendResult result = SmsWebService.getInstance().sendRequest(PublicValue.SMS_URL_SEND_SMS, request);
-           // if (result.getIsSuccessful()) {
+            SmsSendResult result = SmsWebService.getInstance().sendRequest(PublicValue.SMS_URL_SEND_SMS, request);
+            if (result.getIsSuccessful()) {
                 return true;
-          //  } else {
-          //      return false;
-          //  }
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new AppException("sms.general.sms");
