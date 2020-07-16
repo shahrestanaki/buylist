@@ -4,16 +4,13 @@ import com.enump.FeeEnum;
 import com.enump.UnitEnum;
 import com.googlecode.jmapper.annotations.JMap;
 import com.model.BaseEntityView;
-import com.tools.INumber;
 import com.tools.PersianOnly;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.Date;
 
 @Data
 public class GoodsView extends BaseEntityView {
@@ -30,11 +27,11 @@ public class GoodsView extends BaseEntityView {
 
     @JMap
     @Length(min = 2, max = 20, message = "نام کالا باید حداقل {min} و حداکثر {max} حرف داشته باشه")
-    @Pattern(regexp= PersianOnly.PATTERN,message = "برای نام کالا فقط از حروف فارسی استفاده کن")
+    @Pattern(regexp = PersianOnly.PATTERN, message = "برای نام کالا فقط از حروف فارسی استفاده کن")
     private String name;
 
     @JMap
-    @Max(value = 1000 , message = "حداکثر تعداد کالا رو می تونی {value} وارد کنی")
+    @Max(value = 1000, message = "حداکثر تعداد کالا رو می تونی {value} وارد کنی")
     @NotNull
     private Float counts;
 
@@ -47,7 +44,7 @@ public class GoodsView extends BaseEntityView {
     private Integer minFee;
 
     @JMap
-    @Max(value = 100000000 , message = "قیمت کالا از {value} نمیتونه بیشتر باشه")
+    @Max(value = 100000000, message = "قیمت کالا از {value} نمیتونه بیشتر باشه")
     private Integer maxFee;
 
     @JMap
@@ -61,7 +58,7 @@ public class GoodsView extends BaseEntityView {
 
     @JMap
     @Length(min = 5, max = 255, message = "برای توضیحات کالا بین {min} و {max} حرف وارد کن")
-    @Pattern(regexp= PersianOnly.PATTERN,message = "برای توضیحات کالا تنها از حروف فارسی استفاده کن")
+    @Pattern(regexp = PersianOnly.PATTERN, message = "برای توضیحات کالا تنها از حروف فارسی استفاده کن")
     private String comment;
 
     public void setUnit(UnitEnum unit) {
@@ -71,6 +68,6 @@ public class GoodsView extends BaseEntityView {
 
     public void setUnitFee(FeeEnum unitFee) {
         this.unitFee = unitFee;
-        this.unitFeeName = unitFee.getName();
+        this.unitFeeName = unitFee != null ? unitFee.getName() : "";
     }
 }

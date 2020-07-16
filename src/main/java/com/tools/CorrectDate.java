@@ -1,10 +1,11 @@
 package com.tools;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
 public class CorrectDate {
@@ -25,24 +26,19 @@ public class CorrectDate {
     }
 
     public static String miladiToShamsi(Date date, String format) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        String[] newDate = new String[]{"" + cal.get(Calendar.YEAR), "" + (cal.get(Calendar.MONTH) + 1), "" + cal.get(Calendar.DAY_OF_MONTH)};
-        if (newDate[1].length() == 1) {
-            newDate[1] = "0" + newDate[1];
-        }
-        if (newDate[2].length() == 1) {
-            newDate[2] = "0" + newDate[2];
-        }
-        return String.join(format, newDate);
+        LocalDate gregDate = Instant.ofEpochMilli(date.getTime())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        com.github.mfathi91.time.PersianDate persianDate = com.github.mfathi91.time.PersianDate.fromGregorian(gregDate);
+        return persianDate.toString().replaceAll("-", format);
     }
 
-    public static String shamsiToMiladi(String shamsi) {
-        Locale locale = new Locale("fa");
-        Calendar calendar = Calendar.getInstance(locale);
-        DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, locale);
+    public static String shamsiToMiladi(String shamsi, String formatSh, String formatEn) {
+        String[] sp = shamsi.split(formatSh);
+        com.github.mfathi91.time.PersianDate persianDate = com.github.mfathi91.time.PersianDate.of(Integer.valueOf(sp[0]), Integer.valueOf(sp[1]), Integer.valueOf(sp[2]));
+        LocalDate gregDate1 = persianDate.toGregorian();
 
-        return df.format(calendar);
+        return gregDate1.toString().replaceAll("-", formatEn);
     }
 
     public static Date changeDate(Date date, int number, int unit) {
