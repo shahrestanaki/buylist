@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(rollbackFor = Exception.class)
 public class GeneralService<Pk, M, V> {
-
     @Autowired
     UserService userSrv;
 

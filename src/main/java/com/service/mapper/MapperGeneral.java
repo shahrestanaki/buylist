@@ -1,7 +1,5 @@
 package com.service.mapper;
 
-import com.model.BaseEntity;
-import com.model.BaseEntityView;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;

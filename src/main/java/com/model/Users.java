@@ -1,6 +1,5 @@
 package com.model;
 
-import com.googlecode.jmapper.annotations.JMap;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -20,10 +19,10 @@ public class Users extends BaseEntity {
     @Column(name = "id", length = 25, nullable = false)
     private Long id;
 
-    @Column(name = "username", length = 50, nullable = false , unique = true)
+    @Column(name = "username", length = 50, nullable = false, unique = true)
     private String userName;
 
-    @Column(name = "mobile", length = 11, nullable = false , unique = true)
+    @Column(name = "mobile", length = 11, nullable = false, unique = true)
     private String mobile;
 
     @Column(name = "nickName", length = 20)

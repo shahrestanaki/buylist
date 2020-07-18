@@ -1,6 +1,5 @@
 package com.repository;
 
-import com.googlecode.jmapper.JMapper;
 import com.model.BaseEntity;
 import com.model.BaseEntityView;
 import com.service.search.SearchCriteria;
@@ -14,7 +13,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -71,7 +69,7 @@ public interface GeneralRepository<M extends BaseEntity, V extends BaseEntityVie
         return combinedSpecs[0];
     }
 
-    default SimplePageResponse<V> list(M t, JMapper<V, M> mapperToView, SearchCriteriaList search) {
+/*    default SimplePageResponse<V> list(M t, JMapper<V, M> mapperToView, SearchCriteriaList search) {
         Example<M> example = Example.of(t);
         Page results = findAll(example, paging(search));
 
@@ -81,7 +79,7 @@ public interface GeneralRepository<M extends BaseEntity, V extends BaseEntityVie
                 viewList.add(mapperToView.getDestination(item))
         );
         return new SimplePageResponse<V>(viewList, results.getTotalElements());
-    }
+    }*/
 
     default SimplePageResponse<M> list(M m, SearchCriteriaList search) {
         Example<M> example = Example.of(m);

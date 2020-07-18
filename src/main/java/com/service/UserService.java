@@ -6,12 +6,14 @@ import com.model.SingUpTemp;
 import com.model.SmsHistory;
 import com.model.Users;
 import com.repository.UserRepository;
+import com.service.mapper.MapperGeneral;
 import com.tools.CorrectDate;
 import com.tools.GeneralTools;
 import com.tools.GetResourceBundle;
 import com.tools.TokenRead;
 import com.view.*;
 import com.webservice.sms.SmsSend;
+import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,8 @@ public class UserService {
     private final int MAX_SINGUP_SMS = Integer.valueOf(GetResourceBundle.getConfig.getString("MAX_SMS_SEND_USER"));
     private final int MAX_SMS_FOGOT_USER = Integer.valueOf(GetResourceBundle.getConfig.getString("MAX_SMS_FOGOT_USER"));
     private final String PASSWORD_KEY = "MKt7Y6qw7ACk5Crk";
+    private MapperFacade mapper = MapperGeneral.mapper(Users.class, UsersView.class);
+
     @Autowired
     private UserRepository userRepo;
 
@@ -55,7 +59,6 @@ public class UserService {
         if (temp == null || temp.getCounts() <= MAX_SINGUP_SMS) {
             singUpTempSrv.sendSmsSingUp(temp, singUp);
             return new UserGeneralResponse(HttpStatus.OK);
-            //return new UserGeneralResponse(HttpStatus.OK, code);
         } else {
             throw new AppException("singup.max.in.today");
         }
@@ -134,7 +137,7 @@ public class UserService {
     }
 
     public UsersView info() {
-        return null;///////////////UserMapper.INSTANCE.map(getByUserName());
+        return mapper.map(getByUserName(), UsersView.class);
     }
 
     public UsersView update(UsersUpdateView view) {
@@ -155,7 +158,6 @@ public class UserService {
         return new UserGeneralResponse(HttpStatus.BAD_REQUEST);
     }
 
-
     private Users getByMobile(String mobile) {
         return userRepo.getByMobile(mobile);
     }
@@ -173,7 +175,7 @@ public class UserService {
     }
 
     private UsersView updateView(Users user) {
-        return null;///////////////UserMapper.INSTANCE.map(userRepo.save(user));
+        return mapper.map(userRepo.save(user), UsersView.class);
     }
 
     public Users getCurrentUser() {

@@ -1,7 +1,6 @@
 package com.model;
 
 import com.enump.UserGroupRoleEnum;
-import com.googlecode.jmapper.annotations.JMap;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -10,12 +9,12 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table( name = "UserGroup",
-        uniqueConstraints = { @UniqueConstraint( columnNames = { "NICKNAME", "GROUP_ID" } ),
-                @UniqueConstraint( columnNames = { "GROUP_ID", "USER_ID" } )} )
+@Table(name = "UserGroup",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"NICKNAME", "GROUP_ID"}),
+                @UniqueConstraint(columnNames = {"GROUP_ID", "USER_ID"})})
 public class UserGroup extends BaseEntity {
     private static final long serialVersionUID = 1L;
-    @JMap
+
     @Id
     @GenericGenerator(name = "UserGroup_sequence", strategy = "sequence", parameters = {
             @org.hibernate.annotations.Parameter(name = "sequenceName", value = "UserGroup_sequence"),
@@ -26,7 +25,7 @@ public class UserGroup extends BaseEntity {
     @Column(name = "id", length = 25, nullable = false)
     private Long id;
 
-    @JMap
+
     @Column(name = "GROUP_ID", nullable = false)
     private Long groupId;
 
@@ -34,7 +33,7 @@ public class UserGroup extends BaseEntity {
     @JoinColumn(name = "GROUP_ID", insertable = false, updatable = false)
     Group group;
 
-    @JMap
+
     @Column(name = "USER_ID", nullable = false)
     private Long userId;
 
@@ -42,20 +41,21 @@ public class UserGroup extends BaseEntity {
     @JoinColumn(name = "USER_ID", insertable = false, updatable = false)
     Users users;
 
-    @JMap
-    @Column(name = "NICKNAME", length = 20 )
+
+    @Column(name = "NICKNAME", length = 20)
     private String nickName;
 
-    @JMap
+
     @Column(name = "AVATAR", length = 20)
     private String avatar;
 
-    @JMap
+
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserGroupRoleEnum role;
 
-    public UserGroup(){}
+    public UserGroup() {
+    }
 
     public UserGroup(Long groupId, Long userId, UserGroupRoleEnum role) {
         this.groupId = groupId;

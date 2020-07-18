@@ -1,6 +1,5 @@
 package com.model;
 
-import com.googlecode.jmapper.annotations.JMap;
 import com.tools.CorrectDate;
 import lombok.Data;
 
@@ -12,14 +11,12 @@ import java.util.Date;
 @MappedSuperclass
 public class BaseEntityView implements Serializable {
     private static final long serialVersionUID = 1L;
-    @JMap
     public Date createDate;
     public String createDateFa;
-    @JMap
     public Date changeDate;
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
-        this.createDateFa = CorrectDate.miladiToShamsi(createDate, "/");
+        this.createDateFa = createDate == null ? "" : CorrectDate.miladiToShamsi(createDate, "/");
     }
 }

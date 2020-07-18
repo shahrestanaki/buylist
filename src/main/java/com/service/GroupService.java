@@ -2,13 +2,14 @@ package com.service;
 
 import com.enump.UserGroupRoleEnum;
 import com.exception.AppException;
-import com.googlecode.jmapper.JMapper;
 import com.model.Group;
 import com.model.UserGroup;
 import com.repository.GroupRepository;
+import com.service.mapper.MapperGeneral;
 import com.service.search.GoodsSearch;
 import com.tools.GeneralTools;
 import com.view.*;
+import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +18,11 @@ import java.util.List;
 
 @Service
 public class GroupService extends GeneralService<Long, Group, GroupView> {
+    private MapperFacade mapper = MapperGeneral.mapper(Group.class, GroupView.class);
+    private MapperFacade mapperToModel = MapperGeneral.mapper(GroupView.class, Group.class);
 
     @Autowired
     private GroupRepository groupRepo;
-    JMapper<Group, GroupView> mapper = new JMapper<>(Group.class, GroupView.class);
-    JMapper<GroupView, Group> mapperToView = new JMapper<>(GroupView.class, Group.class);
 
     @Autowired
     private UserGroupService userGroupSrv;
@@ -30,7 +31,8 @@ public class GroupService extends GeneralService<Long, Group, GroupView> {
     private GoodsService goodsService;
 
     public GroupView create(GroupView view) {
-        return mapperToView.getDestination(save(mapper.getDestination(view)));
+        Group obj = save(mapperToModel.map(view, Group.class));
+        return mapper.map(obj, GroupView.class);
     }
 
     public Group save(Group group) {
@@ -48,7 +50,7 @@ public class GroupService extends GeneralService<Long, Group, GroupView> {
         List<UserGroup> ulist = userGroupSrv.getAllbyUserId(getUser().getId());
         List<GroupView> list = new ArrayList<>();
         ulist.forEach(item ->
-                list.add(mapperToView.getDestination(item.getGroup()))
+                list.add(mapper.map(item.getGroup(), GroupView.class))
         );
         return list;
     }
@@ -142,6 +144,34 @@ public class GroupService extends GeneralService<Long, Group, GroupView> {
             }
         }
         userGroupSrv.save(userG);
+    }
+
+    public boolean userIsAdminOfGroup(long userId, long groupId) {
+        UserGroup userGroup = userGroupSrv.findByUserAndGroup(userId, groupId);
+        if (userGroup != null && userGroup.getRole().equals(UserGroupRoleEnum.Admin)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean userIsManagerOfGroup(long userId, long groupId) {
+        UserGroup userGroup = userGroupSrv.findByUserAndGroup(userId, groupId);
+        if (userGroup != null && userGroup.getRole().equals(UserGroupRoleEnum.Manager)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean userIsEditorOfGroup(long userId, long groupId) {
+        UserGroup userGroup = userGroupSrv.findByUserAndGroup(userId, groupId);
+        if (userGroup != null && (userGroup.getRole().equals(UserGroupRoleEnum.Manager)
+                || userGroup.getRole().equals(UserGroupRoleEnum.Admin))) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

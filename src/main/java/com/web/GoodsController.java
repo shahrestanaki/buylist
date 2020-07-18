@@ -40,4 +40,15 @@ public class GoodsController {
         return goodsService.list(search);
     }
 
+    @ApiOperation(value = "delete goods by id")
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable long id) {
+         goodsService.delete(id);
+    }
+
+    @PostMapping("/update")
+    public GoodsView update(@Valid @RequestBody GoodsView view) {
+        return goodsService.update(view);
+    }
+
 }

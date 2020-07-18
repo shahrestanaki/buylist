@@ -12,6 +12,7 @@ import com.view.MessageTicketDto;
 import com.view.MessageView;
 import com.view.SendMessageDto;
 import com.view.SimplePageResponse;
+import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ import java.util.List;
 
 @Service
 public class MessageService extends GeneralService {
-
+    private MapperFacade mapper = MapperGeneral.mapper(Message.class, MessageView.class);
     @Autowired
     private MessageRepository messageRepo;
 
@@ -62,7 +63,7 @@ public class MessageService extends GeneralService {
         SimplePageResponse<MessageView> result = new SimplePageResponse<>();
         List<MessageView> listView = new ArrayList<>();
         messageRepo.list(message, search).getContent().forEach(item ->
-                listView.add(MapperGeneral.mapper(Message.class, MessageView.class).map(item, MessageView.class))
+                listView.add(mapper.map(item, MessageView.class))
         );
         result.setContent(listView);
         result.setCount(listView.size());

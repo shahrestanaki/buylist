@@ -5,7 +5,6 @@ import com.model.Goods;
 import com.repository.GoodsRepository;
 import com.service.mapper.MapperGoods;
 import com.service.search.GoodsSearch;
-import com.tools.CorrectDate;
 import com.view.BuyGoodsDto;
 import com.view.GoodsView;
 import com.view.SimplePageResponse;
@@ -28,7 +27,9 @@ public class GoodsService extends GeneralService<Long, Goods, GoodsView> {
     public GoodsView create(GoodsView view) {
         view.setId(null);
         view.setBuy(false);
-        checkAccessToGroup(view.getGroupId());
+        if (!groupService.userIsEditorOfGroup(getUser().getId(), view.getGroupId())) {
+            throw new AppException("general.error.notAccess");
+        }
         Goods goods = goodsRepo.save(MapperGoods.mapperToModel().map(view, Goods.class));
         return MapperGoods.mapper().map(goods, GoodsView.class);
     }
@@ -79,5 +80,29 @@ public class GoodsService extends GeneralService<Long, Goods, GoodsView> {
         Goods goods = new Goods();
         goods.setGroupId(search.getGroupId());
         return goodsRepo.list(goods, search);
+    }
+
+    public void delete(long id) {
+        Optional<Goods> goods = goodsRepo.findById(id);
+        if (!goods.isPresent()) {
+            throw new AppException("general.error.notAccess");
+        }
+        if (!groupService.userIsEditorOfGroup(getUser().getId(), goods.get().getGroupId())) {
+            throw new AppException("general.error.notAccess");
+        }
+
+        if (goods.get().getBuyerId() != null) {
+            throw new AppException("goods.error.delete.buy");
+        }
+        goodsRepo.deleteById(id);
+    }
+
+    public GoodsView update(GoodsView view) {
+        Goods goods = MapperGoods.mapperToModel().map(view, Goods.class);
+        if (!groupService.userIsEditorOfGroup(getUser().getId(), goods.getGroupId())) {
+            throw new AppException("general.error.notAccess");
+        }
+        goods = goodsRepo.save(goods);
+        return MapperGoods.mapper().map(goods, GoodsView.class);
     }
 }
