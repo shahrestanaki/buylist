@@ -138,7 +138,7 @@ public class GroupService extends GeneralService<Long, Group, GroupView> {
             userGroupSrv.changeUsersRole(view.getGroupId(), view.getUserRoles());
         }
         if (userG.getRole().equals(UserGroupRoleEnum.Admin)) {
-            if (view.getAdmin() != null || !view.getAdmin().equals(getUserGroup(view.getGroupId()).getId())) {
+            if (view.getAdmin() != null && !view.getAdmin().equals(getUserGroup(view.getGroupId()).getId())) {
                 userG.setRole(UserGroupRoleEnum.normal);
                 userGroupSrv.changeAdmin(view.getGroupId(), view.getAdmin());
             }
