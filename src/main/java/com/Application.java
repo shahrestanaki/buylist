@@ -31,7 +31,7 @@ public class Application {
             socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
             System.out.println("-------------------- Application start in " + new Date() + " and IP: " + socket.getLocalAddress().getHostAddress() + " ----------------------");
         } catch (UnknownHostException | SocketException e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
     }
 
