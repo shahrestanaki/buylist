@@ -13,6 +13,10 @@ import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.Date;
 
 @SpringBootApplication
@@ -23,7 +27,12 @@ public class Application {
 
     public static void main(String... args) {
         SpringApplication.run(Application.class, args);
-        System.out.println("-------------------- Application start in " + new Date() + " ----------------------");
+        try (final DatagramSocket socket = new DatagramSocket()) {
+            socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+            System.out.println("-------------------- Application start in " + new Date() + " and IP: " + socket.getLocalAddress().getHostAddress() + " ----------------------");
+        } catch (UnknownHostException | SocketException e) {
+            e.printStackTrace(); 
+        }
     }
 
 
