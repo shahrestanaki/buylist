@@ -2,9 +2,7 @@ package com.service;
 
 import com.enump.SmsTypeEnum;
 import com.exception.AppException;
-import com.model.SingUpTemp;
-import com.model.SmsHistory;
-import com.model.Users;
+import com.model.*;
 import com.repository.UserRepository;
 import com.service.mapper.MapperGeneral;
 import com.tools.CorrectDate;
@@ -59,6 +57,7 @@ public class UserService {
         if (temp == null || temp.getCounts() <= MAX_SINGUP_SMS) {
             singUpTempSrv.sendSmsSingUp(temp, singUp);
             return new UserGeneralResponse(HttpStatus.OK);
+            //return new UserGeneralResponse(HttpStatus.OK, code);
         } else {
             throw new AppException("singup.max.in.today");
         }
@@ -137,7 +136,8 @@ public class UserService {
     }
 
     public UsersView info() {
-        return mapper.map(getByUserName(), UsersView.class);
+        Users user = getByUserName();
+        return MapperGeneral.mapper(Users.class, UsersView.class).map(user, UsersView.class);
     }
 
     public UsersView update(UsersUpdateView view) {
@@ -158,6 +158,7 @@ public class UserService {
         return new UserGeneralResponse(HttpStatus.BAD_REQUEST);
     }
 
+
     private Users getByMobile(String mobile) {
         return userRepo.getByMobile(mobile);
     }
@@ -175,7 +176,7 @@ public class UserService {
     }
 
     private UsersView updateView(Users user) {
-        return mapper.map(userRepo.save(user), UsersView.class);
+        return null;///////////////UserMapper.INSTANCE.map(userRepo.save(user));
     }
 
     public Users getCurrentUser() {
